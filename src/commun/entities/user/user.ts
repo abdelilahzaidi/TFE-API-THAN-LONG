@@ -1,8 +1,11 @@
 import { Exclude } from "class-transformer";
 import { UserGender } from "src/commun/enums/gender.enum";
 import { UserStatus } from "src/commun/enums/status.enum";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { LevelEntity } from "../level/level";
+import { RoleEntity } from "../role/role";
+import { PeriodEntity } from "../period/period";
+import { TeamEntity } from "../team/team";
 
 @Entity('users')
 export class UserEntity{
@@ -43,13 +46,17 @@ export class UserEntity{
     @Column({ type: 'enum', enum: UserStatus, default: UserStatus.MEMBER })
     status: UserStatus;
 
-    // @ManyToMany(() => RoleEntity, role => role.users)
-    // @JoinTable({
-    //     name: 'user_role',
-    //     joinColumn: { name: 'user_id', referencedColumnName: 'id' },
-    //     inverseJoinColumn: { name: 'role_id', referencedColumnName: 'id' }
-    // })
-    // roles: RoleEntity[];
+    @ManyToMany(() => RoleEntity, role => role.users)
+    @JoinTable({
+        name: 'user_role',
+        joinColumn: { name: 'user_id', referencedColumnName: 'id' },
+        inverseJoinColumn: { name: 'role_id', referencedColumnName: 'id' }
+    })
+    roles: RoleEntity[];
     @ManyToOne(() => LevelEntity, level => level.users, { nullable: true })
     level: LevelEntity;
+
+    priods: PeriodEntity[];    
+    teams:TeamEntity[];
+    
 }

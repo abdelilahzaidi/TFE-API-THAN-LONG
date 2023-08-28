@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 1
 import { UserEntity } from 'src/commun/entities/user/user';
 import { UserCreateDTO } from 'src/commun/dto/user/user-create.dto';
+import { UserRoleDTO } from 'src/commun/dto/user/user-role.dto';
 
 @Controller('user')
 export class UserController {
@@ -39,4 +40,10 @@ export class UserController {
 
         return this.userService.findOneById(id);
     }
+
+    @Post('role')
+    async addRole(@Body() dto :UserRoleDTO):Promise<any>{
+        await this.userService.addRole(dto)
+    }
+   
 }

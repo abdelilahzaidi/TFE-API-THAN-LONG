@@ -4,6 +4,6 @@ export class CreateLevelDto {
     @IsNotEmpty()
     grade: string;
 
-    @IsNotEmpty()
+    
     programId: number;
 }
