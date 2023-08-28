@@ -6,6 +6,7 @@ import {
   Delete,
   Inject,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
   Param,
   forwardRef,
@@ -25,7 +26,8 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>,
     @Inject(forwardRef(() => RoleService)) // Correction ici
     private readonly roleService: RoleService, //private readonly levelService: LevelService
-  ) {}
+    //private readonly levelService : LevelService
+    ) {}
   async all(): Promise<UserEntity[]> {
     return await this.userRepository.find();
   }
@@ -51,14 +53,17 @@ export class UserService {
       user.attributionDate = new Date();
       user.actif = dto.actif;
       user.gsm = dto.gsm;
+      //user.level=level
       //user.roles=dto.roleId
+
+      const userFound = await this.userRepository.findOne({where:{ email: dto.email }});
+      if (userFound) {
+          throw new ConflictException('Cette adresse e-mail est déjà utilisée.');
+      }
 
       return this.userRepository.save(user);
     } catch (error) {
-      if ((error.code = '10000')) {
-        throw new ConflictException('Duplicate Email!!');
-      }
-      throw error;
+      throw new InternalServerErrorException('Une erreur est survenue lors de la création de l\'utilisateur.');
     }
   }
 
