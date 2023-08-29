@@ -9,11 +9,4 @@ export class LieuEntity{
 
     @Column()
     adresse: string;
-
-    // @ManyToOne(() => EventEntity, event => event, { nullable: true })
-    // event: EventEntity[];
-
-    // @ManyToOne(() => CourEntity, cour => cour.lieu)
-    // cour:CourEntity[];
-
 }

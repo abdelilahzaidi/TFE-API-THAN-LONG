@@ -1,7 +1,7 @@
 import { IsNotEmpty } from "class-validator";
 
-export class CourCreateDTO{
+export class CreateCourDTO{
     @IsNotEmpty()
-    conten: string;    
+    contenu: string;    
     lieuId: number;
 }
