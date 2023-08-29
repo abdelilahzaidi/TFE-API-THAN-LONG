@@ -5,17 +5,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from 'src/commun/entities/user/user';
 import { LevelModule } from '../level/level.module';
 import { RoleModule } from '../role/role.module';
-import { RoleEntity } from 'src/commun/entities/role/role';
-import { RoleService } from '../role/role.service';
+import { EventModule } from '../event/event.module';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([UserEntity,RoleEntity],), 
-  forwardRef(() => RoleModule),
+  imports:[
+    TypeOrmModule.forFeature([UserEntity]),
+    forwardRef(() => RoleModule),
     forwardRef(() => LevelModule),
- 
-  
-],
-  providers: [UserService, RoleService],
+    forwardRef(()=>EventModule)
+  ],
+  providers: [UserService],
   controllers: [UserController],
   exports:[UserService]
 })

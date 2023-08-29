@@ -8,6 +8,10 @@ import { ProgramModule } from './modules/program/program.module';
 import { RoleModule } from './modules/role/role.module';
 import { PeriodModule } from './modules/period/period.module';
 import { TeamModule } from './modules/team/team.module';
+import { EventModule } from './modules/event/event.module';
+import { TypeEventModule } from './modules/type-event/type-event.module';
+import { LieuModule } from './modules/lieu/lieu.module';
+import { CourModule } from './modules/cour/cour.module';
 
 @Module({
   imports: [
@@ -18,6 +22,10 @@ import { TeamModule } from './modules/team/team.module';
     RoleModule,
     PeriodModule,
     TeamModule,
+    EventModule,
+    TypeEventModule,
+    LieuModule,
+    CourModule    
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -6,6 +6,8 @@ import { LevelEntity } from "../level/level";
 import { RoleEntity } from "../role/role";
 import { PeriodEntity } from "../period/period";
 import { TeamEntity } from "../team/team";
+import { EventEntity } from "../event/event";
+import { CourEntity } from "../cour/cour";
 
 @Entity('users')
 export class UserEntity{
@@ -58,5 +60,24 @@ export class UserEntity{
 
     priods: PeriodEntity[];    
     teams:TeamEntity[];
+
+
+
+    @ManyToMany(() => EventEntity, event => event.users)
+    @JoinTable({
+        name: 'user_event',
+        joinColumn: { name: 'user_id', referencedColumnName: 'id' },
+        inverseJoinColumn: { name: 'event_id', referencedColumnName: 'id' }
+    })
+    events: EventEntity[];
+
+
+    @ManyToMany(() => CourEntity, cour => cour.users)
+    @JoinTable({
+        name: 'user_cour',
+        joinColumn: { name: 'user_id', referencedColumnName: 'id' },
+        inverseJoinColumn: { name: 'cour_id', referencedColumnName: 'id' }
+    })
+    cours: EventEntity[];
     
 }

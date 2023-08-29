@@ -16,7 +16,8 @@ import { RoleService } from '../role/role.service';
     forwardRef(()=>UserModule),
     forwardRef(()=>RoleModule)
   ],
-  providers: [PeriodService,UserService,RoleService],
-  controllers: [PeriodController]
+  providers: [PeriodService],
+  controllers: [PeriodController],
+  exports: [PeriodService]
 })
 export class PeriodModule {}

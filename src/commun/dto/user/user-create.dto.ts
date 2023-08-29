@@ -42,8 +42,8 @@ export class UserCreateDTO{
 
     roleId : number;
 
-    constructor() {
-        this.status = UserStatus.MEMBER; // Valeur par défaut "member"
-        this.levelId=1
+    constructor(id:number) {        
+        this.status = UserStatus.MEMBER; // Valeur par défaut "member"         
     }
+    
 }

@@ -10,11 +10,12 @@ import { RoleService } from '../role/role.service';
 import { RoleEntity } from 'src/commun/entities/role/role';
 
 @Module({
-  imports:[TypeOrmModule.forFeature(
-    [TeamEntity,UserEntity,RoleEntity]),
-    forwardRef(()=>UserModule)
+  imports:[
+    TypeOrmModule.forFeature([TeamEntity,UserEntity,RoleEntity]),
+    UserModule
   ],
-  providers: [TeamService,UserService,RoleService],
-  controllers: [TeamController]
+  providers: [TeamService],
+  controllers: [TeamController],
+  exports: [TeamService]
 })
 export class TeamModule {}

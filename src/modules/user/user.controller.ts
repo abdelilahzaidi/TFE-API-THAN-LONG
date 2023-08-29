@@ -1,9 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { UserService } from './user.service';
-1
+import { UserService } from './user.service';1
 import { UserEntity } from 'src/commun/entities/user/user';
 import { UserCreateDTO } from 'src/commun/dto/user/user-create.dto';
 import { UserRoleDTO } from 'src/commun/dto/user/user-role.dto';
+import { UserEventDTO } from 'src/commun/dto/user/user-event.dto';
+
 
 @Controller('user')
 export class UserController {
@@ -46,4 +47,8 @@ export class UserController {
         await this.userService.addRole(dto)
     }
    
+    @Post('event')
+    async addEvent(@Body() dto :UserEventDTO):Promise<any>{
+        await this.userService.addEvent(dto)
+    }
 }
