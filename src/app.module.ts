@@ -12,10 +12,12 @@ import { EventModule } from './modules/event/event.module';
 import { TypeEventModule } from './modules/type-event/type-event.module';
 import { LieuModule } from './modules/lieu/lieu.module';
 import { CourModule } from './modules/cour/cour.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
     BdModule,
+    AuthModule,
     UserModule,
     LevelModule,
     ProgramModule,

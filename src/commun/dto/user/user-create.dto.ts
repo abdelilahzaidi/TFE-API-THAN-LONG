@@ -1,5 +1,6 @@
 import { IsBoolean, IsEmail, IsIn, IsNotEmpty } from "class-validator";
 import { UserGender } from "src/commun/enums/gender.enum";
+import { LevelEnum } from "src/commun/enums/level.enum";
 import { UserStatus } from "src/commun/enums/status.enum";
 
 
@@ -36,14 +37,8 @@ export class UserCreateDTO{
   
     @IsNotEmpty()
     gsm: string;
+
+    @IsNotEmpty()
+    grade:LevelEnum;
    
-    
-    levelId :number
-
-    roleId : number;
-
-    constructor(id:number) {        
-        this.status = UserStatus.MEMBER; // Valeur par défaut "member"         
-    }
-    
 }

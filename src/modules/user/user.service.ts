@@ -2,8 +2,13 @@ import { LevelService } from './../level/level.service';
 import { UserEntity } from './../../commun/entities/user/user';
 import {
   
+  ConflictException,
+  HttpException,
+  HttpStatus,
   Inject,
   Injectable,
+  
+  InternalServerErrorException,
   
   NotFoundException,
  
@@ -38,56 +43,44 @@ export class UserService {
   async createUser(dto: UserCreateDTO): Promise<UserEntity> {
     const hashedPassword = await bcrypt.hash('Zah14$01471983', 12);
 
-    const level = await this.levelService.findLevelById(dto.levelId);
-    const user = new UserEntity();
-    user.first_name = dto.first_name;
-    user.last_name = dto.last_name;
-    user.email = dto.email;
-    user.gender = dto.gender;
-    user.adress = dto.adress;
-    user.birthDate = dto.birthDate;
-    user.password = hashedPassword;
-    user.attributionDate = new Date();
-    user.actif = dto.actif;
-    user.gsm = dto.gsm;
-    user.level=level      
+    try {
+      const level = await  this.levelService.findLevelByGrade(dto.grade)
+        if (!level) {
+          throw new NotFoundException(`Level with ID ${dto.grade} not found.`);
+        }
 
- 
+      const userFound = await this.userRepository.findOne({
+        where: { email: dto.email },
+      });
+      if (userFound) {
+        throw new ConflictException('Cette adresse e-mail est déjà utilisée.');
+      }
 
-    return this.userRepository.save(user);
-
-    // try {
-    //   const level = await this.levelService.findLevelById(dto.levelId);
-      
-    //   if (!level) {
-    //     throw new NotFoundException(`Level with ID ${dto.levelId} not found.`);
-    //   }
-
-    //   const user = new UserEntity();
-    //   user.first_name = dto.first_name;
-    //   user.last_name = dto.last_name;
-    //   user.email = dto.email;
-    //   user.gender = dto.gender;
-    //   user.adress = dto.adress;
-    //   user.birthDate = dto.birthDate;
-    //   user.password = hashedPassword;
-    //   user.attributionDate = new Date();
-    //   user.actif = dto.actif;
-    //   user.gsm = dto.gsm;
-    //   user.level=level      
-
-    //   const userFound = await this.userRepository.findOne({where:{ email: dto.email }});
-    //   if (userFound) {
-    //       throw new ConflictException('Cette adresse e-mail est déjà utilisée.');
-    //   }
-
-    //   return this.userRepository.save(user);
-    // } catch (error) {
-    //   throw new InternalServerErrorException('Une erreur est survenue lors de la création de l\'utilisateur.');
-    // }
+      const user = new UserEntity();
+      user.first_name = dto.first_name;
+      user.last_name = dto.last_name;
+      user.email = dto.email;
+      user.gender = dto.gender;
+      user.adress = dto.adress;
+      user.birthDate = dto.birthDate;
+      user.password = hashedPassword;
+      user.attributionDate = new Date();
+      user.actif = dto.actif;
+      user.gsm = dto.gsm;
+      user.level=level
+      user.status=dto.status
+      return this.userRepository.save(user);
+    } catch (error) {
+      throw new InternalServerErrorException(
+        error,
+        "Une erreur est survenue lors de la création de l'utilisateur.",
+      );
+    }
   }
 
-  
+  async create(data): Promise<UserEntity> {
+    return this.userRepository.save(data);
+}
 
   async update(id: number, data): Promise<any> {
     return this.userRepository.update(id, data);
@@ -106,6 +99,15 @@ export class UserService {
     return this.userRepository.findOne({ where: { id } });
   }
 
+  async findUserStatusByUserId(id: any) {
+    const user = await this.userRepository.findOne({ where: { id } });
+
+    if (!user) {
+      throw new HttpException('No user found by Id', HttpStatus.NOT_FOUND);
+    }
+
+    return user.status;
+  }
 
   async addRole(dto: UserRoleDTO) {
     try {

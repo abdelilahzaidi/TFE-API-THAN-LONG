@@ -17,11 +17,14 @@ export class EventService {
 
 
 
-    async createProgram(dto: EventCreateDTO): Promise<EventEntity> {        
+    async createEvent(dto: EventCreateDTO): Promise<EventEntity> {        
     
         try {
             
-    
+            const eventFound = await this.eventRepository.findOne({where:{ name: dto.nom}});
+            if (eventFound) {
+                throw new ConflictException('Cet évenemeny existe déjà.');
+            }
             const event = new EventEntity();
 
             event.name=dto.nom
@@ -29,14 +32,11 @@ export class EventService {
             event.dateFin=dto.dateFin
       
 
-      const eventFound = await this.eventRepository.findOne({where:{ name: dto.nom}});
-      if (eventFound) {
-          throw new ConflictException('Cet évenemeny existe déjà.');
-      }
+    
 
       return this.eventRepository.save(event);
     } catch (error) {
-      throw new InternalServerErrorException('Une erreur est survenue lors de la création de l\'évenement.');
+      throw new InternalServerErrorException(error,'Une erreur est survenue lors de la création de l\'évenement.');
     }
     }
 

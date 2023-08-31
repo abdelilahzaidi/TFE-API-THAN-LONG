@@ -12,6 +12,6 @@ export class EventController {
     }
     @Post()
     async create(@Body() dto : EventCreateDTO):Promise<EventEntity>{
-      return await this.eventService.createProgram(dto)
+      return await this.eventService.createEvent(dto)
     }
 }
