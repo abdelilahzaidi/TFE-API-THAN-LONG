@@ -17,7 +17,7 @@ export class LieuService {
         return await this.lieuRepository.find();
       }
 
-      async createLevel(dto: CreateLieuDto): Promise<LieuEntity> {
+      async createLieu(dto: CreateLieuDto): Promise<LieuEntity> {
         try {//const program = await this.programService.findProgramById(dto.programId); // Récupérez le programme associé
 
             const lieu = new LieuEntity();

@@ -1,13 +1,13 @@
 import { Exclude } from "class-transformer";
 import { UserGender } from "src/commun/enums/gender.enum";
 import { UserStatus } from "src/commun/enums/status.enum";
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { LevelEntity } from "../level/level";
-import { RoleEntity } from "../role/role";
-import { PeriodEntity } from "../period/period";
-import { TeamEntity } from "../team/team";
-import { EventEntity } from "../event/event";
-import { CourEntity } from "../cour/cour";
+import { MessageEntity } from "../message/message";
+import { SeanceEntity } from "../seance/seance";
+import { AbonnementEntity } from "../abonnement/abonnement";
+import { SeanceUserEntity } from "../seance_user/seance-user";
+
 
 @Entity('users')
 export class UserEntity{
@@ -48,36 +48,32 @@ export class UserEntity{
     @Column({ type: 'enum', enum: UserStatus, default: UserStatus.MEMBER })
     status: UserStatus;
 
-    @ManyToMany(() => RoleEntity, role => role.users)
-    @JoinTable({
-        name: 'user_role',
-        joinColumn: { name: 'user_id', referencedColumnName: 'id' },
-        inverseJoinColumn: { name: 'role_id', referencedColumnName: 'id' }
-    })
-    roles: RoleEntity[];
+    
     @ManyToOne(() => LevelEntity, level => level.users, { nullable: true })
     level: LevelEntity;
 
-    priods: PeriodEntity[];    
-    teams:TeamEntity[];
-
-
-
-    @ManyToMany(() => EventEntity, event => event.users)
+    @OneToMany(() => MessageEntity, (message) => message.sender)
+    sentMessages: MessageEntity[];
+    @ManyToMany(() => MessageEntity, (message) => message.receivers)
     @JoinTable({
-        name: 'user_event',
-        joinColumn: { name: 'user_id', referencedColumnName: 'id' },
-        inverseJoinColumn: { name: 'event_id', referencedColumnName: 'id' }
+      name: 'message_user',
+      joinColumn: { name: 'user_id', referencedColumnName: 'id' },
+      inverseJoinColumn: { name: 'message_id', referencedColumnName: 'id' },
     })
-    events: EventEntity[];
+    receivedMessages: MessageEntity[];
 
+    @ManyToMany(() => SeanceEntity, (seance) => seance.users)
+  @JoinTable({
+    name: 'user_seance',
+    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'seance_id', referencedColumnName: 'id' },
+  })
+  seances: SeanceEntity[]; 
 
-    @ManyToMany(() => CourEntity, cour => cour.users)
-    @JoinTable({
-        name: 'user_cour',
-        joinColumn: { name: 'user_id', referencedColumnName: 'id' },
-        inverseJoinColumn: { name: 'cour_id', referencedColumnName: 'id' }
-    })
-    cours: EventEntity[];
-    
+  @OneToMany(() => SeanceUserEntity, (seanceUser) => seanceUser.user)
+  seanceUsers: SeanceUserEntity[];
+
+  @OneToMany(() => AbonnementEntity, (abonnement) => abonnement.user)
+  abonnements: AbonnementEntity[]; 
+
 }

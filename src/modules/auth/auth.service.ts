@@ -18,7 +18,7 @@ export class AuthService {
 
     }
     
-//Register service
+
 //Register service
 async signup(signUpDto: SignUpDTO): Promise<UserEntity> {
     const { password, password_confirm } = signUpDto;
@@ -44,27 +44,51 @@ async signup(signUpDto: SignUpDTO): Promise<UserEntity> {
     }
 }
 
-    //Login user
-    async login(dto: LoginDTO): Promise<{ token: string }> {
-        const { email, password } = dto;
+//Login user
+async login(dto: LoginDTO): Promise<{ token: string, user: any }> {
+    const { email, password } = dto;
 
-        const user = await this.userService.findOneByEmail(email);
-        console.log('before', user);
+    const user = await this.userService.findOneByEmail(email);
+    console.log('before', user);
 
-        if (!user) {
-            throw new UnauthorizedException('Invalid email adress or password.');
-        }
-
-        //Check if password is correct or not
-        const isPasswordMatched = await bcrypt.compare(password, user.password);
-        console.log('Paswword', isPasswordMatched);
-        if (!isPasswordMatched) {
-            throw new UnauthorizedException('Invalid email adress or password');
-        }
-
-        const token = await JwtFeature.assignJwtToken(user.id, this.jwtService);
-        console.log(token);
-
-        return { token };
+    if (!user) {
+        throw new UnauthorizedException('Invalid email adress or password.');
     }
+
+    //Check if password is correct or not
+    const isPasswordMatched = await bcrypt.compare(password, user.password);
+    console.log('Paswword', isPasswordMatched);
+    if (!isPasswordMatched) {
+        throw new UnauthorizedException('Invalid email adress or password');
+    }
+
+    const token = await JwtFeature.assignJwtToken(user.id, this.jwtService);
+    console.log(token);
+
+    return { token, user };
+}
+
+    //Login user
+    // async login(dto: LoginDTO): Promise<{ token: string }> {
+    //     const { email, password } = dto;
+
+    //     const user = await this.userService.findOneByEmail(email);
+    //     console.log('before', user);
+
+    //     if (!user) {
+    //         throw new UnauthorizedException('Invalid email adress or password.');
+    //     }
+
+    //     //Check if password is correct or not
+    //     const isPasswordMatched = await bcrypt.compare(password, user.password);
+    //     console.log('Paswword', isPasswordMatched);
+    //     if (!isPasswordMatched) {
+    //         throw new UnauthorizedException('Invalid email adress or password');
+    //     }
+
+    //     const token = await JwtFeature.assignJwtToken(user.id, this.jwtService);
+    //     console.log(token);
+
+    //     return { token };
+    // }
 }

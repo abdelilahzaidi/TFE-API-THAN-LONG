@@ -4,15 +4,12 @@ import { UserController } from './user.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from 'src/commun/entities/user/user';
 import { LevelModule } from '../level/level.module';
-import { RoleModule } from '../role/role.module';
-import { EventModule } from '../event/event.module';
+
 
 @Module({
   imports:[
-    TypeOrmModule.forFeature([UserEntity]),
-    forwardRef(() => RoleModule),
-    forwardRef(() => LevelModule),
-    forwardRef(()=>EventModule)
+    TypeOrmModule.forFeature([UserEntity]),   
+    forwardRef(() => LevelModule),  
   ],
   providers: [UserService],
   controllers: [UserController],

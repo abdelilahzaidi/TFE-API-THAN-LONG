@@ -11,7 +11,7 @@ import { StatusGuard } from 'src/shared/security/status.guard';
 
 
 @Module({
-  imports:[    
+  imports:[
     PassportModule.register({
       defaultStrategy :'jwt'
     }),
@@ -20,8 +20,7 @@ import { StatusGuard } from 'src/shared/security/status.guard';
           signOptions : {expiresIn:'1d'}
           })
     ,
-    forwardRef(() => UserModule), 
-    forwardRef(()=> RoleModule)  
+    forwardRef(() => UserModule)
   ],
   providers: [AuthService, JwtStrategy],
   controllers: [AuthController],

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { LieuService } from './lieu.service';
 import { LieuEntity } from 'src/commun/entities/lieu/lieu';
 import { CreateLieuDto } from 'src/commun/dto/lieu/lieu-create.dto';
@@ -16,6 +16,11 @@ export class LieuController {
     @Post()
     async create(@Body() dto : CreateLieuDto): Promise<LieuEntity> {
       console.log(dto)
-      return await this.lieuService.createLevel(dto);
+      return await this.lieuService.createLieu(dto);
+    }
+
+    @Get(':id')
+    async getLieuById(@Param('id') id: number){
+        return this.lieuService.findLieuById(id)
     }
 }

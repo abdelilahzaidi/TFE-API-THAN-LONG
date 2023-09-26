@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { UserEntity } from "../user/user";
 import { LieuEntity } from "../lieu/lieu";
+import { SeanceEntity } from "../seance/seance";
 
 @Entity('cour')
 export class CourEntity{
@@ -10,8 +11,11 @@ export class CourEntity{
     @Column()
     contenu: string;
 
-    users :UserEntity[];
+   
     @ManyToOne(() => LieuEntity, lieu => lieu.id, { nullable: true })
     lieu: LieuEntity;
+
+    @OneToMany(() => SeanceEntity, (seance) => seance.cour)
+    seances: SeanceEntity[];
 
 }
